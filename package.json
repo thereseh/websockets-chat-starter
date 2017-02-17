@@ -1,0 +1,33 @@
+{
+  "name": "websockets-chat",
+  "version": "1.0.0",
+  "engines": {
+    "node": "7.4.0",
+    "npm": "4.0.5"
+  },
+  "description": "Homework assignment to set up a websockets chat",
+  "main": "./path/src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src",
+    "test": "echo \"No Tests\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thereseh/websockets-chat-starter.git"
+  },
+  "author": "Therese Henriksson",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/thereseh/websockets-chat-starter/issues"
+  },
+  "homepage": "https://github.com/thereseh/websockets-chat-starter#readme",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "socket.io": "^1.7.2"
+  }
+}

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- import the websocket client library. You can code websockets from scratch
+  <!-- import the websocket client library. You can code websockets from scratch
          but we will just import a library. In this case we are using socket.io which is 
          one of the most popular and feature rich websocket libraries.
          
@@ -10,23 +11,91 @@
          online at your node.js address under /socket.io/socket.io.js 
          You can disable that on the server if desired
     -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-	<style>
-		textarea {
-			display: block;
-			background-color: #EEEEEE;
-		}
-	</style>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <script type="text/babel">
+  const connectSocket = (e) => {
+    let chat = document.querySelector("#chat");
+    const socket = io.connect(); 
+    
+    socket.on('connect', () => {
+      console.log('connecting');
+      
+      let user = document.querySelector("#username").value;
+      
+      if (!user) {
+        user = 'unknown';
+      }
+      
+      socket.emit('join', { name: user });
+    });
+    
+    socket.on('msg', (data) => {
+      console.log(data);
+    });
+    
+    // when the user click the send button,
+    // message is sent to the server
+    const send = document.querySelector("#send"); send.addEventListener('click', () => {
+      console.log("send message");
+      socket.emit('msgToServer', { msg: message.value });
+      message.value = '';
+    });
+    
+    const change = document.querySelector("#change");
+    change.style.display = "inline";
+    change.addEventListener('click', () => {
+      let user = document.querySelector("#username").value;
+      console.log("change name");
+      socket.emit('nameChange', { name: user });
+    });
+    
+    // message returned from server, update the chat window
+    socket.on('chatWindow', (msg) => {
+      chat.value += (`${msg}\n`);
+    });
+     
+    /* 
+    when a new user enters the chat, the old chat log is returned from the server to update the chat log.
+    */
+    socket.on('updateChat', (msg) => {
+      chat.value += (`${msg}`);
+    });   
+  };
+
+  const init = () => {
+    const connect = document.querySelector("#connect");
+    connect.addEventListener('click', () => {
+      connectSocket();
+      connect.style.display = "none";
+    });
+    //connect.addEventListener('click', connectSocket);
+  }; 
+
+  window.onload = init;
+
+  </script>
+  <style>
+    textarea {
+      display: block;
+      background-color: #EEEEEE;
+    }
+
+  </style>
 </head>
+
 <body>
-	<label for="user">Username:</label>
-	<input id="username" name="user" type="text"/>
-	<input id="connect" type='button' value='connect'/>
-	</br>
-	<label for="message">Message:</label>
-	<input id="message" name="message" type="text"/>
-	<input id="send" type="button" value="send" />
-	
-	<textarea id="chat" rows="20" cols="40" readonly> </textarea>
+  <label for="user">Username:</label>
+  <input id="username" name="user" type="text" />
+  <input id="change" type='button' style='display: none' value='new name' />
+  <input id="connect" type='button' value='connect' />
+  <br>
+  <label for="message">Message:</label>
+  <input id="message" name="message" type="text" />
+  <input id="send" type="button" value="send" />
+
+  <textarea id="chat" rows="20" cols="40" readonly> </textarea>
 </body>
+
 </html>
