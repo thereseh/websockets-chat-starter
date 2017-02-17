@@ -33,12 +33,6 @@ const onJoined = (sock) => {
       name: 'server',
       msg: `There are ${Object.keys(users).length} users online`,
     };
-    // Returned to client for chat window telling how many that's currently on the serveR
-    socket.emit('chatWindow', `Server: ${joinMsg.msg}`);
-    socket.name = data.name;
-    users[socket.name] = socket.name;
-
-    socket.join('room1');
     /*
     if there is currently a conversation in the chat room,
     update the chat log of the client that has entered since the conversation started
@@ -46,6 +40,12 @@ const onJoined = (sock) => {
     if (chat.length > 0) {
       socket.emit('updateChat', chat);
     }
+    // Returned to client for chat window telling how many that's currently on the serveR
+    socket.emit('chatWindow', `Server: ${joinMsg.msg}`);
+    socket.name = data.name;
+    users[socket.name] = socket.name;
+
+    socket.join('room1');
     socket.emit('msg', joinMsg);
     const response = {
       name: 'server',
