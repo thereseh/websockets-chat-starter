@@ -98,15 +98,14 @@ const onNameChange = (sock) => {
     socket.broadcast.to('room1').emit('msg', { name: 'server', msg: message });
     // tell the chat that the person has changed the name
     socket.broadcast.emit('chatWindow', `Server: ${message}`);
-    chat += (`Server: ${msg}\n`);
+    chat += (`Server: ${message}\n`);
     // personal client message from server
     socket.emit('chatWindow', `Server: You have changed the name to  ${data.name}`);
     // change the name of the socket, add to the list of users and delete the old sockt name
-    let currName = socket.name;
-    socket.name = data.name
+    const currName = socket.name;
+    socket.name = data.name;
     users[socket.name] = socket.name;
     delete users[currName];
-    
   });
 };
 
